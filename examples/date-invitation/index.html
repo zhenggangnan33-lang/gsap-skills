@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>一封约会邀请函 💌</title>
   <meta name="description" content="一个可以被认真打开的小惊喜：约会邀请函。" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg-1: #fff4f2;
@@ -21,6 +18,8 @@
       --envelope: #f7a8b8;
       --envelope-dark: #ee8ea3;
       --shadow: 0 20px 50px rgba(224, 71, 109, 0.18);
+      /* system fonts only, so the page loads anywhere (no Google Fonts) */
+      --hand: "Kaiti SC", "STKaiti", "KaiTi", "Kai", "楷体", serif;
     }
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
@@ -50,7 +49,7 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body { margin: 0; height: 100%; }
     body {
-      font-family: "Noto Serif SC", "PingFang SC", "Songti SC", serif;
+      font-family: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
       color: var(--ink);
       background: radial-gradient(circle at 20% 10%, var(--bg-2), transparent 55%),
                   radial-gradient(circle at 90% 90%, var(--bg-2), transparent 50%),
@@ -72,7 +71,7 @@
     /* ---------- scene 1: envelope ---------- */
     .hint { text-align: center; margin-bottom: 28px; }
     .hint small { display: block; color: var(--ink-soft); letter-spacing: .2em; font-size: 12px; margin-bottom: 8px; }
-    .hint h1 { font-family: "Ma Shan Zheng", cursive; font-weight: 400; font-size: clamp(28px, 7vw, 40px); margin: 0; }
+    .hint h1 { font-family: var(--hand); font-weight: 400; font-size: clamp(28px, 7vw, 40px); margin: 0; }
     .envelope-wrap { display: flex; flex-direction: column; align-items: center; }
     .envelope {
       position: relative; width: min(300px, 80vw); aspect-ratio: 3 / 2; border: 0; padding: 0;
@@ -110,10 +109,10 @@
       background-image: repeating-linear-gradient(to bottom, transparent 0 33px, var(--line) 33px 34px);
       background-position: 0 14px;
     }
-    .card h2 { font-family: "Ma Shan Zheng", cursive; font-weight: 400; font-size: 30px; margin: 0 0 6px; color: var(--rose-deep); }
+    .card h2 { font-family: var(--hand); font-weight: 400; font-size: 30px; margin: 0 0 6px; color: var(--rose-deep); }
     .card .sub { color: var(--ink-soft); font-size: 14px; margin: 0 0 18px; }
     .letter p { line-height: 34px; margin: 0; font-size: 16px; }
-    .letter .sign { text-align: right; margin-top: 10px; font-family: "Ma Shan Zheng", cursive; font-size: 22px; }
+    .letter .sign { text-align: right; margin-top: 10px; font-family: var(--hand); font-size: 22px; }
     .line { display: block; }
 
     .btn {
@@ -121,7 +120,7 @@
       background: var(--rose); color: #fff; box-shadow: 0 8px 20px rgba(255, 111, 145, .35);
     }
     .btn:focus-visible, .chip:focus-visible, .envelope:focus-visible { outline: 3px solid var(--rose-deep); outline-offset: 3px; }
-    .btn.ghost { background: transparent; color: var(--ink-soft); box-shadow: inset 0 0 0 1.5px var(--line); }
+    .btn.ghost { background: var(--paper); color: var(--ink-soft); box-shadow: inset 0 0 0 1.5px var(--line); }
     .btn[disabled] { opacity: .45; cursor: not-allowed; }
     .actions { display: flex; justify-content: center; gap: 14px; margin-top: 22px; flex-wrap: wrap; }
 
@@ -138,6 +137,7 @@
     .step-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
     .step-dots i.on { background: var(--rose); width: 20px; border-radius: 4px; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; }
+    .grid.two { grid-template-columns: 1fr 1fr; }
     .chip {
       border: 1.5px solid var(--line); background: var(--paper); border-radius: 14px;
       padding: 12px 6px; text-align: center; font-size: 14px; line-height: 1.35;
@@ -145,6 +145,7 @@
     .chip b { display: block; font-size: 24px; margin-bottom: 2px; font-weight: 400; }
     .chip small { color: var(--ink-soft); font-size: 12px; }
     .chip[aria-pressed="true"] { border-color: var(--rose); background: color-mix(in srgb, var(--rose) 14%, var(--paper)); }
+    .rain { margin-top: 14px; padding: 10px 12px; border-radius: 12px; font-size: 14px; line-height: 1.6; background: color-mix(in srgb, var(--line) 40%, var(--paper)); }
     .label { font-size: 13px; color: var(--ink-soft); margin: 16px 0 8px; letter-spacing: .1em; }
     textarea {
       width: 100%; min-height: 96px; resize: vertical; border-radius: 14px; border: 1.5px solid var(--line);
@@ -171,9 +172,9 @@
     .ticket .foot { padding: 0 24px 22px; text-align: center; }
     .ticket .foot p { color: var(--ink-soft); font-size: 13px; margin: 0 0 14px; }
     .stamp {
-      position: absolute; right: 18px; top: 70px; transform: rotate(-14deg);
+      position: absolute; right: 16px; top: 16px; transform: rotate(-14deg);
       border: 3px solid var(--rose-deep); color: var(--rose-deep); border-radius: 10px;
-      padding: 4px 10px; font-family: "Ma Shan Zheng", cursive; font-size: 24px; background: var(--paper);
+      padding: 4px 10px; font-family: var(--hand); font-size: 24px; background: var(--paper);
       visibility: hidden;
     }
 
@@ -231,8 +232,8 @@
     <section class="scene" id="sAsk" aria-label="邀请">
       <div class="card ask">
         <span class="big-heart" aria-hidden="true">💌</span>
-        <h2>要不要和我去约会？</h2>
-        <p class="sub">认真的，不是随口一问。</p>
+        <h2>10月1日，要不要和我去约会？</h2>
+        <p class="sub">中午 12:00 · 认真的，不是随口一问。</p>
         <div class="choices">
           <button class="btn" id="yesBtn">好呀 ♥</button>
           <button class="btn ghost" id="noBtn">再想想</button>
@@ -241,16 +242,14 @@
       </div>
     </section>
 
-    <!-- 4. when -->
-    <section class="scene" id="sWhen" aria-label="选择时间">
+    <!-- 4. where -->
+    <section class="scene" id="sWhere" aria-label="选择地点">
       <div class="card">
         <div class="step-dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
-        <h2>哪天有空？</h2>
-        <p class="sub">你挑，我都有空（真的）</p>
-        <div class="label">日期</div>
-        <div class="grid" id="dateGrid" role="group" aria-label="日期"></div>
-        <div class="label">时间</div>
-        <div class="grid" id="timeGrid" role="group" aria-label="时间"></div>
+        <h2>去东钱湖走走？</h2>
+        <p class="sub">10月1日 中午 12:00 见，想先去哪儿？（可多选）</p>
+        <div class="grid two" id="whereGrid" role="group" aria-label="地点"></div>
+        <div class="rain">☔ <b>如果下雨</b>：就改去 <b>东钱湖帆船俱乐部</b>，不怕淋湿。</div>
         <div class="actions"><button class="btn" data-next="sFood" disabled>下一步</button></div>
       </div>
     </section>
@@ -259,7 +258,7 @@
     <section class="scene" id="sFood" aria-label="选择吃什么">
       <div class="card">
         <div class="step-dots" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i></div>
-        <h2>想吃点什么？</h2>
+        <h2>在万象城吃点什么？</h2>
         <p class="sub">可以多选，吃不完我兜底</p>
         <div class="grid" id="foodGrid" role="group" aria-label="食物"></div>
         <div class="actions"><button class="btn" data-next="sDo" disabled>下一步</button></div>
@@ -270,9 +269,9 @@
     <section class="scene" id="sDo" aria-label="选择活动">
       <div class="card">
         <div class="step-dots" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i></div>
-        <h2>吃完去做什么？</h2>
-        <p class="sub">也可以多选</p>
-        <div class="grid" id="doGrid" role="group" aria-label="活动"></div>
+        <h2>吃完去小酌一杯？</h2>
+        <p class="sub">也可以两家都去</p>
+        <div class="grid two" id="doGrid" role="group" aria-label="活动"></div>
         <div class="actions"><button class="btn" data-next="sNote" disabled>下一步</button></div>
       </div>
     </section>
@@ -298,16 +297,17 @@
         <div class="stamp" id="stamp">已确认</div>
         <div class="body">
           <dl>
-            <dt>日期</dt><dd id="tDate"></dd>
-            <dt>时间</dt><dd id="tTime"></dd>
+            <dt>时间</dt><dd id="tDate"></dd>
+            <dt>去哪儿</dt><dd id="tWhere"></dd>
+            <dt>雨天</dt><dd>东钱湖帆船俱乐部</dd>
             <dt>吃</dt><dd id="tFood"></dd>
-            <dt>玩</dt><dd id="tDo"></dd>
+            <dt>饭后</dt><dd id="tDo"></dd>
             <dt>留言</dt><dd id="tNote"></dd>
           </dl>
         </div>
         <div class="tear" aria-hidden="true"><span></span></div>
         <div class="foot">
-          <p>截图或复制下面的内容发给 <span data-bind="from"></span> 吧，TA 在等你的回复。</p>
+          <p id="footMsg"></p>
           <div class="actions" style="margin-top:0">
             <button class="btn" id="copyReply">复制回复</button>
             <button class="btn ghost" id="restart">重新选</button>
@@ -321,7 +321,7 @@
       <div class="card">
         <h2>做一封你的邀请函</h2>
         <p class="sub">把不好意思说出口的话，变成一个可以被认真打开的小惊喜。</p>
-        <label class="field"><span>TA 的名字</span><input id="cTo" maxlength="20" placeholder="小满" /></label>
+        <label class="field"><span>TA 的名字</span><input id="cTo" maxlength="20" placeholder="穆子怡小姐" /></label>
         <label class="field"><span>你的名字</span><input id="cFrom" maxlength="20" placeholder="阿树" /></label>
         <label class="field"><span>想对 TA 说的话（可选，用 / 分行）</span><input id="cMsg" maxlength="160" placeholder="最近总想起你 / 所以想认真问一次" /></label>
         <div class="actions">
@@ -347,13 +347,17 @@
     // ---------- data from the URL (so anyone can send their own) ----------
     const params = new URLSearchParams(location.search);
     const cfg = {
-      to: params.get("to") || "你",
+      to: params.get("to") || "穆子怡小姐",
       from: params.get("from") || "我",
       msg: params.get("msg") ||
-        "想把那些不好意思说出口的话/变成一个可以被认真打开的小惊喜。/每次想约你，都在心里排练很多遍，/所以这一次，想认真地问你：",
+        "想把那些不好意思说出口的话/变成一个可以被认真打开的小惊喜。/国庆第一天，想和你一起去东钱湖吹吹风，/所以这一次，想认真地问你：",
     };
     $$('[data-bind="to"]').forEach((el) => (el.textContent = cfg.to));
     $$('[data-bind="from"]').forEach((el) => (el.textContent = cfg.from));
+    const hasFrom = params.has("from");
+    $("#footMsg").textContent = hasFrom
+      ? `截图或复制下面的内容发给 ${cfg.from} 吧，TA 在等你的回复。`
+      : "截图或复制下面的内容发给我吧，我在等你的回复。";
     $("#letterBody").innerHTML = "";
     cfg.msg.split("/").map((s) => s.trim()).filter(Boolean).forEach((line) => {
       const span = document.createElement("span");
@@ -363,7 +367,8 @@
     });
 
     // ---------- answer state ----------
-    const answer = { date: null, time: null, food: new Set(), doing: new Set() };
+    const DATE_TEXT = "10月1日（周四）中午 12:00";
+    const answer = { where: new Set(), food: new Set(), doing: new Set() };
 
     // ---------- scene switching ----------
     let current = null;
@@ -376,7 +381,7 @@
       tl.fromTo(next, { autoAlpha: 0, y: 40, scale: 0.97 }, { autoAlpha: 1, y: 0, scale: 1, duration: D(0.6) });
       const kids = $$(".card > *, .envelope-wrap > *", next);
       if (kids.length) tl.from(kids, { autoAlpha: 0, y: 16, stagger: 0.06, duration: D(0.45), clearProps: "all" }, "<0.1");
-      $("#goCreate").style.display = id === "sCreate" ? "none" : "";
+      $("#goCreate").style.display = params.has("create") && id !== "sCreate" ? "" : "none";
       return tl;
     }
 
@@ -478,7 +483,7 @@
       const [x, y] = centerOf(yesBtn);
       burst(x, y, 34);
       gsap.to(yesBtn, { scale: 1, duration: D(0.2) });
-      gsap.delayedCall(D(0.7), () => show("sWhen"));
+      gsap.delayedCall(D(0.7), () => show("sWhere"));
     });
 
     // ---------- choice grids ----------
@@ -503,27 +508,21 @@
     }
     const nextBtn = (sceneId) => $(`#${sceneId} [data-next]`);
 
-    // dates: the next 7 days
-    const week = ["日", "一", "二", "三", "四", "五", "六"];
-    const dates = Array.from({ length: 7 }, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() + i + 1);
-      const label = `${d.getMonth() + 1}月${d.getDate()}日`;
-      return { label, sub: i === 0 ? "明天" : "周" + week[d.getDay()], value: `${label}（周${week[d.getDay()]}）` };
-    });
-    const times = [
-      { icon: "☀️", label: "中午", sub: "12:00", value: "中午 12:00" },
-      { icon: "🌇", label: "傍晚", sub: "17:30", value: "傍晚 17:30" },
-      { icon: "🌙", label: "晚上", sub: "19:00", value: "晚上 19:00" },
+    const places = [
+      { icon: "🏔️", label: "东钱湖小瑞士", sub: "湖边草坪 · 拍照" },
+      { icon: "🌅", label: "南岸", sub: "沿湖散步 · 看日落" },
     ];
-    const checkWhen = () => (nextBtn("sWhen").disabled = !(answer.date && answer.time));
-    makeChips($("#dateGrid"), dates, { multi: false, onChange: (it) => { answer.date = it.value; checkWhen(); } });
-    makeChips($("#timeGrid"), times, { multi: false, onChange: (it) => { answer.time = it.value; checkWhen(); } });
+    makeChips($("#whereGrid"), places, { multi: true, onChange: (it, on) => {
+      on ? answer.where.add(it.label) : answer.where.delete(it.label);
+      nextBtn("sWhere").disabled = answer.where.size === 0;
+    } });
 
+    // 万象城 dining options — swap in the exact restaurant names you have in mind
     const foods = [
-      { icon: "🍲", label: "火锅" }, { icon: "🍣", label: "日料" }, { icon: "🍝", label: "西餐" },
-      { icon: "🍢", label: "烧烤" }, { icon: "🥘", label: "韩料" }, { icon: "🍜", label: "粉面" },
-      { icon: "🍰", label: "甜品" }, { icon: "🎲", label: "你决定" },
+      { icon: "🍲", label: "火锅", sub: "万象城" }, { icon: "🍣", label: "日料", sub: "万象城" },
+      { icon: "🍝", label: "西餐", sub: "万象城" }, { icon: "🥘", label: "韩料", sub: "万象城" },
+      { icon: "🥟", label: "粤菜/茶餐厅", sub: "万象城" }, { icon: "🦐", label: "本帮/宁波菜", sub: "万象城" },
+      { icon: "🍰", label: "甜品", sub: "万象城" }, { icon: "🎲", label: "你决定", sub: "我都行" },
     ];
     makeChips($("#foodGrid"), foods, { multi: true, onChange: (it, on) => {
       on ? answer.food.add(it.label) : answer.food.delete(it.label);
@@ -531,9 +530,8 @@
     } });
 
     const doings = [
-      { icon: "🎬", label: "看电影" }, { icon: "🌃", label: "压马路" }, { icon: "🖼️", label: "看展" },
-      { icon: "🎤", label: "唱K" }, { icon: "🎸", label: "Livehouse" }, { icon: "🎡", label: "游乐园" },
-      { icon: "📚", label: "逛书店" }, { icon: "🐈", label: "撸猫" },
+      { icon: "📸", label: "PLUTE", sub: "拍照为主的小酒馆" },
+      { icon: "🐶", label: "Soma Cocktail Bar", sub: "小狗吧 · 有宠物能小酌" },
     ];
     makeChips($("#doGrid"), doings, { multi: true, onChange: (it, on) => {
       on ? answer.doing.add(it.label) : answer.doing.delete(it.label);
@@ -546,8 +544,9 @@
     function replyText() {
       const note = $("#note").value.trim();
       return [
-        `${cfg.from}，我答应你啦 ♥`,
-        `📅 ${answer.date} ${answer.time}`,
+        hasFrom ? `${cfg.from}，我答应你啦 ♥` : "我答应你啦 ♥",
+        `📅 ${DATE_TEXT}`,
+        `📍 ${[...answer.where].join("、")}（下雨就去东钱湖帆船俱乐部）`,
         `🍽️ ${[...answer.food].join("、")}`,
         `✨ ${[...answer.doing].join("、")}`,
         note ? `💬 ${note}` : "",
@@ -555,8 +554,8 @@
       ].filter(Boolean).join("\n");
     }
     $("#finish").addEventListener("click", () => {
-      $("#tDate").textContent = answer.date;
-      $("#tTime").textContent = answer.time;
+      $("#tDate").textContent = DATE_TEXT;
+      $("#tWhere").textContent = [...answer.where].join("、");
       $("#tFood").textContent = [...answer.food].join("、");
       $("#tDo").textContent = [...answer.doing].join("、");
       $("#tNote").textContent = $("#note").value.trim() || "期待见到你";
@@ -575,8 +574,8 @@
         window.prompt("复制下面的内容：", text);
       }
     }
-    $("#copyReply").addEventListener("click", () => copy(replyText(), "已复制，快去发给 " + cfg.from + " 吧"));
-    $("#restart").addEventListener("click", () => show("sWhen"));
+    $("#copyReply").addEventListener("click", () => copy(replyText(), hasFrom ? "已复制，快去发给 " + cfg.from + " 吧" : "已复制，快发给我吧"));
+    $("#restart").addEventListener("click", () => show("sWhere"));
 
     // ---------- creator ----------
     function buildLink() {
