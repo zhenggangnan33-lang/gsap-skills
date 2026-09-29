@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>一封约会邀请函 💌</title>
+  <meta name="description" content="一个可以被认真打开的小惊喜：约会邀请函。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-1: #fff4f2;
+      --bg-2: #ffe1e6;
+      --ink: #4a2c33;
+      --ink-soft: #8d6a72;
+      --rose: #ff6f91;
+      --rose-deep: #e0476d;
+      --paper: #fffdf9;
+      --line: #f3cfd7;
+      --envelope: #f7a8b8;
+      --envelope-dark: #ee8ea3;
+      --shadow: 0 20px 50px rgba(224, 71, 109, 0.18);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg-1: #22161b;
+        --bg-2: #3a1f2a;
+        --ink: #fbe9ee;
+        --ink-soft: #d3aab5;
+        --paper: #2d1d23;
+        --line: #5a3140;
+        --envelope: #c9607a;
+        --envelope-dark: #a94a63;
+        --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg-1: #22161b;
+      --bg-2: #3a1f2a;
+      --ink: #fbe9ee;
+      --ink-soft: #d3aab5;
+      --paper: #2d1d23;
+      --line: #5a3140;
+      --envelope: #c9607a;
+      --envelope-dark: #a94a63;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      font-family: "Noto Serif SC", "PingFang SC", "Songti SC", serif;
+      color: var(--ink);
+      background: radial-gradient(circle at 20% 10%, var(--bg-2), transparent 55%),
+                  radial-gradient(circle at 90% 90%, var(--bg-2), transparent 50%),
+                  var(--bg-1);
+      overflow: hidden;
+    }
+    button { font: inherit; color: inherit; cursor: pointer; }
+
+    /* floating hearts in the background */
+    .sky { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+    .sky span { position: absolute; bottom: -40px; font-size: 18px; opacity: 0; }
+
+    .stage { position: relative; z-index: 1; height: 100%; display: grid; place-items: center; padding: 16px; }
+    .scene {
+      position: absolute; inset: 0; display: grid; place-items: center; padding: 16px;
+      visibility: hidden; opacity: 0;
+    }
+
+    /* ---------- scene 1: envelope ---------- */
+    .hint { text-align: center; margin-bottom: 28px; }
+    .hint small { display: block; color: var(--ink-soft); letter-spacing: .2em; font-size: 12px; margin-bottom: 8px; }
+    .hint h1 { font-family: "Ma Shan Zheng", cursive; font-weight: 400; font-size: clamp(28px, 7vw, 40px); margin: 0; }
+    .envelope-wrap { display: flex; flex-direction: column; align-items: center; }
+    .envelope {
+      position: relative; width: min(300px, 80vw); aspect-ratio: 3 / 2; border: 0; padding: 0;
+      background: var(--envelope); border-radius: 10px; box-shadow: var(--shadow);
+      perspective: 800px;
+    }
+    .envelope .pocket {
+      position: absolute; inset: 0; border-radius: 10px; z-index: 3;
+      background:
+        linear-gradient(to top right, var(--envelope-dark) 50%, transparent 50.5%) left / 50.5% 100% no-repeat,
+        linear-gradient(to top left, var(--envelope-dark) 50%, transparent 50.5%) right / 50.5% 100% no-repeat;
+    }
+    .envelope .flap {
+      position: absolute; top: 0; left: 0; width: 100%; height: 60%; z-index: 4;
+      transform-origin: 50% 0;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      background: var(--envelope-dark); filter: brightness(1.06);
+    }
+    .envelope .peek {
+      position: absolute; left: 8%; right: 8%; top: 10%; height: 80%; z-index: 2;
+      background: var(--paper); border-radius: 6px;
+    }
+    .envelope .seal {
+      position: absolute; left: 50%; top: 60%; z-index: 5; width: 46px; height: 46px; margin: -23px 0 0 -23px;
+      display: grid; place-items: center; font-size: 22px; border-radius: 50%;
+      background: var(--rose-deep); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.2);
+    }
+    .tap { margin-top: 26px; color: var(--ink-soft); font-size: 14px; }
+
+    /* ---------- card shared ---------- */
+    .card {
+      width: min(420px, 100%); max-height: calc(100% - 16px); overflow: auto;
+      background: var(--paper); border-radius: 22px; box-shadow: var(--shadow);
+      padding: 30px 24px 26px; position: relative;
+      background-image: repeating-linear-gradient(to bottom, transparent 0 33px, var(--line) 33px 34px);
+      background-position: 0 14px;
+    }
+    .card h2 { font-family: "Ma Shan Zheng", cursive; font-weight: 400; font-size: 30px; margin: 0 0 6px; color: var(--rose-deep); }
+    .card .sub { color: var(--ink-soft); font-size: 14px; margin: 0 0 18px; }
+    .letter p { line-height: 34px; margin: 0; font-size: 16px; }
+    .letter .sign { text-align: right; margin-top: 10px; font-family: "Ma Shan Zheng", cursive; font-size: 22px; }
+    .line { display: block; }
+
+    .btn {
+      border: 0; border-radius: 999px; padding: 12px 26px; font-size: 16px;
+      background: var(--rose); color: #fff; box-shadow: 0 8px 20px rgba(255, 111, 145, .35);
+    }
+    .btn:focus-visible, .chip:focus-visible, .envelope:focus-visible { outline: 3px solid var(--rose-deep); outline-offset: 3px; }
+    .btn.ghost { background: transparent; color: var(--ink-soft); box-shadow: inset 0 0 0 1.5px var(--line); }
+    .btn[disabled] { opacity: .45; cursor: not-allowed; }
+    .actions { display: flex; justify-content: center; gap: 14px; margin-top: 22px; flex-wrap: wrap; }
+
+    /* ---------- question scene ---------- */
+    .ask { text-align: center; }
+    .ask .big-heart { font-size: 64px; display: inline-block; }
+    .ask h2 { font-size: clamp(28px, 8vw, 36px); margin-top: 8px; }
+    .ask .choices { position: relative; height: 70px; margin-top: 22px; display: flex; justify-content: center; align-items: center; gap: 22px; }
+    #noBtn { position: relative; z-index: 2; }
+    .no-msg { min-height: 22px; color: var(--ink-soft); font-size: 14px; margin-top: 12px; }
+
+    /* ---------- choice chips ---------- */
+    .step-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 16px; }
+    .step-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+    .step-dots i.on { background: var(--rose); width: 20px; border-radius: 4px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; }
+    .chip {
+      border: 1.5px solid var(--line); background: var(--paper); border-radius: 14px;
+      padding: 12px 6px; text-align: center; font-size: 14px; line-height: 1.35;
+    }
+    .chip b { display: block; font-size: 24px; margin-bottom: 2px; font-weight: 400; }
+    .chip small { color: var(--ink-soft); font-size: 12px; }
+    .chip[aria-pressed="true"] { border-color: var(--rose); background: color-mix(in srgb, var(--rose) 14%, var(--paper)); }
+    .label { font-size: 13px; color: var(--ink-soft); margin: 16px 0 8px; letter-spacing: .1em; }
+    textarea {
+      width: 100%; min-height: 96px; resize: vertical; border-radius: 14px; border: 1.5px solid var(--line);
+      background: var(--paper); color: var(--ink); padding: 12px; font: inherit; font-size: 15px;
+    }
+    textarea:focus { outline: none; border-color: var(--rose); }
+
+    /* ---------- ticket ---------- */
+    .ticket { padding: 0; background-image: none; overflow: hidden; }
+    .ticket .head { background: var(--rose); color: #fff; padding: 22px 24px 18px; }
+    .ticket .head small { letter-spacing: .3em; font-size: 11px; opacity: .85; }
+    .ticket .head h2 { color: #fff; margin: 4px 0 0; }
+    .ticket .body { padding: 18px 24px 8px; }
+    .ticket dl { display: grid; grid-template-columns: 64px 1fr; gap: 10px 12px; margin: 0; font-size: 15px; }
+    .ticket dt { color: var(--ink-soft); font-size: 13px; padding-top: 2px; }
+    .ticket dd { margin: 0; }
+    .ticket .tear { position: relative; height: 24px; margin: 8px 0; }
+    .ticket .tear::before { content: ""; position: absolute; left: 20px; right: 20px; top: 50%; border-top: 2px dashed var(--line); }
+    .ticket .tear::after, .ticket .tear span {
+      content: ""; position: absolute; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--bg-1);
+    }
+    .ticket .tear::after { right: -12px; }
+    .ticket .tear span { left: -12px; }
+    .ticket .foot { padding: 0 24px 22px; text-align: center; }
+    .ticket .foot p { color: var(--ink-soft); font-size: 13px; margin: 0 0 14px; }
+    .stamp {
+      position: absolute; right: 18px; top: 70px; transform: rotate(-14deg);
+      border: 3px solid var(--rose-deep); color: var(--rose-deep); border-radius: 10px;
+      padding: 4px 10px; font-family: "Ma Shan Zheng", cursive; font-size: 24px; background: var(--paper);
+      visibility: hidden;
+    }
+
+    /* ---------- creator ---------- */
+    .field { display: block; margin-bottom: 12px; }
+    .field span { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+    .field input {
+      width: 100%; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink);
+      padding: 11px 12px; font: inherit; font-size: 15px;
+    }
+    .field input:focus { outline: none; border-color: var(--rose); }
+    .out { word-break: break-all; font-size: 12px; color: var(--ink-soft); background: color-mix(in srgb, var(--line) 35%, transparent); border-radius: 10px; padding: 10px; margin-top: 12px; display: none; }
+    .corner-link { position: fixed; right: 14px; bottom: 12px; z-index: 5; font-size: 12px; color: var(--ink-soft); background: none; border: 0; text-decoration: underline; }
+    .toast {
+      position: fixed; left: 50%; bottom: 60px; z-index: 20; transform: translateX(-50%);
+      background: var(--ink); color: var(--paper); padding: 10px 18px; border-radius: 999px; font-size: 14px;
+      visibility: hidden; opacity: 0;
+    }
+    .burst { position: fixed; z-index: 15; pointer-events: none; font-size: 20px; left: 0; top: 0; color: var(--rose); }
+    input::placeholder, textarea::placeholder { color: var(--ink-soft); opacity: .5; }
+  </style>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"></div>
+
+  <main class="stage">
+    <!-- 1. envelope -->
+    <section class="scene" id="sEnvelope" aria-label="信封">
+      <div class="envelope-wrap">
+        <div class="hint">
+          <small>A LETTER FOR YOU</small>
+          <h1>给 <span data-bind="to"></span> 的一封信</h1>
+        </div>
+        <button class="envelope" id="envelope" aria-label="拆开信封">
+          <span class="peek"></span>
+          <span class="pocket"></span>
+          <span class="flap"></span>
+          <span class="seal">♥</span>
+        </button>
+        <p class="tap">轻点信封，拆开它</p>
+      </div>
+    </section>
+
+    <!-- 2. letter -->
+    <section class="scene" id="sLetter" aria-label="信">
+      <article class="card letter">
+        <h2>Hi, <span data-bind="to"></span></h2>
+        <p id="letterBody"></p>
+        <p class="sign">—— <span data-bind="from"></span></p>
+        <div class="actions"><button class="btn" id="toAsk">然后呢？</button></div>
+      </article>
+    </section>
+
+    <!-- 3. the question -->
+    <section class="scene" id="sAsk" aria-label="邀请">
+      <div class="card ask">
+        <span class="big-heart" aria-hidden="true">💌</span>
+        <h2>要不要和我去约会？</h2>
+        <p class="sub">认真的，不是随口一问。</p>
+        <div class="choices">
+          <button class="btn" id="yesBtn">好呀 ♥</button>
+          <button class="btn ghost" id="noBtn">再想想</button>
+        </div>
+        <p class="no-msg" id="noMsg" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <!-- 4. when -->
+    <section class="scene" id="sWhen" aria-label="选择时间">
+      <div class="card">
+        <div class="step-dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+        <h2>哪天有空？</h2>
+        <p class="sub">你挑，我都有空（真的）</p>
+        <div class="label">日期</div>
+        <div class="grid" id="dateGrid" role="group" aria-label="日期"></div>
+        <div class="label">时间</div>
+        <div class="grid" id="timeGrid" role="group" aria-label="时间"></div>
+        <div class="actions"><button class="btn" data-next="sFood" disabled>下一步</button></div>
+      </div>
+    </section>
+
+    <!-- 5. food -->
+    <section class="scene" id="sFood" aria-label="选择吃什么">
+      <div class="card">
+        <div class="step-dots" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i></div>
+        <h2>想吃点什么？</h2>
+        <p class="sub">可以多选，吃不完我兜底</p>
+        <div class="grid" id="foodGrid" role="group" aria-label="食物"></div>
+        <div class="actions"><button class="btn" data-next="sDo" disabled>下一步</button></div>
+      </div>
+    </section>
+
+    <!-- 6. activity -->
+    <section class="scene" id="sDo" aria-label="选择活动">
+      <div class="card">
+        <div class="step-dots" aria-hidden="true"><i></i><i></i><i class="on"></i><i></i></div>
+        <h2>吃完去做什么？</h2>
+        <p class="sub">也可以多选</p>
+        <div class="grid" id="doGrid" role="group" aria-label="活动"></div>
+        <div class="actions"><button class="btn" data-next="sNote" disabled>下一步</button></div>
+      </div>
+    </section>
+
+    <!-- 7. note -->
+    <section class="scene" id="sNote" aria-label="留言">
+      <div class="card">
+        <div class="step-dots" aria-hidden="true"><i></i><i></i><i></i><i class="on"></i></div>
+        <h2>还有什么想说的？</h2>
+        <p class="sub">忌口、穿搭、悄悄话……都可以</p>
+        <textarea id="note" maxlength="200" placeholder="比如：不吃香菜 / 我会穿白色毛衣"></textarea>
+        <div class="actions"><button class="btn" id="finish">就这么定了 ♥</button></div>
+      </div>
+    </section>
+
+    <!-- 8. ticket -->
+    <section class="scene" id="sTicket" aria-label="约会票">
+      <div class="card ticket">
+        <div class="head">
+          <small>DATE TICKET · ADMIT TWO</small>
+          <h2><span data-bind="to"></span> × <span data-bind="from"></span></h2>
+        </div>
+        <div class="stamp" id="stamp">已确认</div>
+        <div class="body">
+          <dl>
+            <dt>日期</dt><dd id="tDate"></dd>
+            <dt>时间</dt><dd id="tTime"></dd>
+            <dt>吃</dt><dd id="tFood"></dd>
+            <dt>玩</dt><dd id="tDo"></dd>
+            <dt>留言</dt><dd id="tNote"></dd>
+          </dl>
+        </div>
+        <div class="tear" aria-hidden="true"><span></span></div>
+        <div class="foot">
+          <p>截图或复制下面的内容发给 <span data-bind="from"></span> 吧，TA 在等你的回复。</p>
+          <div class="actions" style="margin-top:0">
+            <button class="btn" id="copyReply">复制回复</button>
+            <button class="btn ghost" id="restart">重新选</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- creator -->
+    <section class="scene" id="sCreate" aria-label="制作邀请函">
+      <div class="card">
+        <h2>做一封你的邀请函</h2>
+        <p class="sub">把不好意思说出口的话，变成一个可以被认真打开的小惊喜。</p>
+        <label class="field"><span>TA 的名字</span><input id="cTo" maxlength="20" placeholder="小满" /></label>
+        <label class="field"><span>你的名字</span><input id="cFrom" maxlength="20" placeholder="阿树" /></label>
+        <label class="field"><span>想对 TA 说的话（可选，用 / 分行）</span><input id="cMsg" maxlength="160" placeholder="最近总想起你 / 所以想认真问一次" /></label>
+        <div class="actions">
+          <button class="btn" id="makeLink">生成链接</button>
+          <button class="btn ghost" id="preview">预览</button>
+        </div>
+        <div class="out" id="linkOut"></div>
+      </div>
+    </section>
+  </main>
+
+  <button class="corner-link" id="goCreate">我也要做一封 →</button>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script>
+  (() => {
+    const $ = (s, root = document) => root.querySelector(s);
+    const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const D = (d) => (reduceMotion ? 0 : d); // duration helper for reduced motion
+
+    // ---------- data from the URL (so anyone can send their own) ----------
+    const params = new URLSearchParams(location.search);
+    const cfg = {
+      to: params.get("to") || "你",
+      from: params.get("from") || "我",
+      msg: params.get("msg") ||
+        "想把那些不好意思说出口的话/变成一个可以被认真打开的小惊喜。/每次想约你，都在心里排练很多遍，/所以这一次，想认真地问你：",
+    };
+    $$('[data-bind="to"]').forEach((el) => (el.textContent = cfg.to));
+    $$('[data-bind="from"]').forEach((el) => (el.textContent = cfg.from));
+    $("#letterBody").innerHTML = "";
+    cfg.msg.split("/").map((s) => s.trim()).filter(Boolean).forEach((line) => {
+      const span = document.createElement("span");
+      span.className = "line";
+      span.textContent = line;
+      $("#letterBody").appendChild(span);
+    });
+
+    // ---------- answer state ----------
+    const answer = { date: null, time: null, food: new Set(), doing: new Set() };
+
+    // ---------- scene switching ----------
+    let current = null;
+    function show(id) {
+      const next = $("#" + id);
+      const prev = current;
+      current = next;
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      if (prev) tl.to(prev, { autoAlpha: 0, y: -30, scale: 0.97, duration: D(0.35), ease: "power2.in" });
+      tl.fromTo(next, { autoAlpha: 0, y: 40, scale: 0.97 }, { autoAlpha: 1, y: 0, scale: 1, duration: D(0.6) });
+      const kids = $$(".card > *, .envelope-wrap > *", next);
+      if (kids.length) tl.from(kids, { autoAlpha: 0, y: 16, stagger: 0.06, duration: D(0.45), clearProps: "all" }, "<0.1");
+      $("#goCreate").style.display = id === "sCreate" ? "none" : "";
+      return tl;
+    }
+
+    // ---------- background hearts ----------
+    const sky = $(".sky");
+    if (!reduceMotion) {
+      const glyphs = ["♥", "♡", "✿", "✦", "💗"];
+      for (let i = 0; i < 16; i++) {
+        const s = document.createElement("span");
+        s.textContent = glyphs[i % glyphs.length];
+        s.style.color = "var(--rose)";
+        sky.appendChild(s);
+        gsap.set(s, { left: gsap.utils.random(0, 100) + "%", scale: gsap.utils.random(0.6, 1.4) });
+        gsap.timeline({ repeat: -1, delay: gsap.utils.random(0, 10) })
+          .fromTo(s, { y: 0, autoAlpha: 0 }, { y: () => -(window.innerHeight + 80), duration: gsap.utils.random(9, 16), ease: "none" })
+          .to(s, { autoAlpha: 0.55, duration: 1.5 }, 0)
+          .to(s, { x: gsap.utils.random(-40, 40), duration: 3, yoyo: true, repeat: 3, ease: "sine.inOut" }, 0);
+      }
+    }
+
+    // ---------- heart burst ----------
+    function burst(x, y, count = 26) {
+      if (reduceMotion) return;
+      const glyphs = ["❤", "💗", "💕", "✨", "🌸"];
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement("span");
+        el.className = "burst";
+        el.textContent = glyphs[i % glyphs.length];
+        document.body.appendChild(el);
+        const angle = gsap.utils.random(0, Math.PI * 2);
+        const dist = gsap.utils.random(80, 220);
+        gsap.timeline({ onComplete: () => el.remove() })
+          .set(el, { x, y, xPercent: -50, yPercent: -50, scale: 0 })
+          .to(el, { x: x + Math.cos(angle) * dist, y: y + Math.sin(angle) * dist, scale: gsap.utils.random(0.7, 1.5), rotation: gsap.utils.random(-90, 90), duration: 0.9, ease: "expo.out" })
+          .to(el, { y: "+=80", autoAlpha: 0, duration: 0.8, ease: "power1.in" }, "-=0.2");
+      }
+    }
+    const centerOf = (el) => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+
+    function toast(text) {
+      const t = $("#toast");
+      t.textContent = text;
+      gsap.killTweensOf(t);
+      gsap.timeline()
+        .fromTo(t, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: D(0.25) })
+        .to(t, { autoAlpha: 0, duration: D(0.3) }, "+=1.8");
+    }
+
+    // ---------- 1 → 2: open the envelope ----------
+    let opened = false;
+    const envelope = $("#envelope");
+    const idle = reduceMotion ? null : gsap.to(envelope, { rotation: 2, y: -6, duration: 1.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
+    envelope.addEventListener("click", () => {
+      if (opened) return;
+      opened = true;
+      idle && idle.kill();
+      const [cx, cy] = centerOf(envelope);
+      gsap.timeline()
+        .to(envelope, { rotation: 0, y: 0, duration: D(0.2) })
+        .to(".seal", { scale: 0, autoAlpha: 0, duration: D(0.25), ease: "back.in(2)" })
+        .to(".flap", { rotationX: 180, duration: D(0.6), ease: "power2.inOut" })
+        .set(".flap", { zIndex: 1 })
+        .to(".peek", { yPercent: -70, duration: D(0.6), ease: "power2.out" })
+        .add(() => burst(cx, cy, 16))
+        .add(() => show("sLetter"), "+=0.25");
+    });
+
+    // ---------- 2: letter lines written one by one ----------
+    $("#toAsk").addEventListener("click", () => {
+      show("sAsk").fromTo(".big-heart", { scale: 0.4, rotation: -20 }, { scale: 1, rotation: 0, duration: D(0.8), ease: "elastic.out(1, 0.4)" }, "<0.2");
+    });
+
+    // ---------- 3: yes / no ----------
+    const noLines = ["真的吗？🥺", "再想想嘛……", "我会准时到的！", "我请客！", "点不到的啦 😝", "好啦，就答应我吧"];
+    let noCount = 0;
+    const noBtn = $("#noBtn");
+    const yesBtn = $("#yesBtn");
+    function dodge(e) {
+      if (e && e.type === "click") e.preventDefault();
+      const box = $(".ask").getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
+      const maxX = box.width / 2 - b.width / 2 - 10;
+      const maxY = 90;
+      $("#noMsg").textContent = noLines[noCount % noLines.length];
+      noCount++;
+      gsap.to(noBtn, {
+        x: gsap.utils.random(-maxX, maxX),
+        y: gsap.utils.random(-maxY, maxY / 2),
+        rotation: gsap.utils.random(-12, 12),
+        scale: Math.max(0.55, 1 - noCount * 0.07),
+        duration: D(0.35),
+        ease: "back.out(2)",
+      });
+      gsap.to(yesBtn, { scale: Math.min(1.6, 1 + noCount * 0.1), duration: D(0.35), ease: "back.out(2)" });
+    }
+    noBtn.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") dodge(e); });
+    noBtn.addEventListener("click", dodge);
+    yesBtn.addEventListener("click", () => {
+      const [x, y] = centerOf(yesBtn);
+      burst(x, y, 34);
+      gsap.to(yesBtn, { scale: 1, duration: D(0.2) });
+      gsap.delayedCall(D(0.7), () => show("sWhen"));
+    });
+
+    // ---------- choice grids ----------
+    function makeChips(container, items, { multi, onChange }) {
+      items.forEach((it) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "chip";
+        chip.setAttribute("aria-pressed", "false");
+        chip.innerHTML = (it.icon ? `<b aria-hidden="true">${it.icon}</b>` : "") + `<span></span>` + (it.sub ? `<br><small></small>` : "");
+        chip.querySelector("span").textContent = it.label;
+        if (it.sub) chip.querySelector("small").textContent = it.sub;
+        chip.addEventListener("click", () => {
+          const on = chip.getAttribute("aria-pressed") !== "true";
+          if (!multi) $$(".chip", container).forEach((c) => c.setAttribute("aria-pressed", "false"));
+          chip.setAttribute("aria-pressed", multi ? String(on) : "true");
+          gsap.fromTo(chip, { scale: 0.9 }, { scale: 1, duration: D(0.4), ease: "back.out(3)" });
+          onChange(it, multi ? on : true);
+        });
+        container.appendChild(chip);
+      });
+    }
+    const nextBtn = (sceneId) => $(`#${sceneId} [data-next]`);
+
+    // dates: the next 7 days
+    const week = ["日", "一", "二", "三", "四", "五", "六"];
+    const dates = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() + i + 1);
+      const label = `${d.getMonth() + 1}月${d.getDate()}日`;
+      return { label, sub: i === 0 ? "明天" : "周" + week[d.getDay()], value: `${label}（周${week[d.getDay()]}）` };
+    });
+    const times = [
+      { icon: "☀️", label: "中午", sub: "12:00", value: "中午 12:00" },
+      { icon: "🌇", label: "傍晚", sub: "17:30", value: "傍晚 17:30" },
+      { icon: "🌙", label: "晚上", sub: "19:00", value: "晚上 19:00" },
+    ];
+    const checkWhen = () => (nextBtn("sWhen").disabled = !(answer.date && answer.time));
+    makeChips($("#dateGrid"), dates, { multi: false, onChange: (it) => { answer.date = it.value; checkWhen(); } });
+    makeChips($("#timeGrid"), times, { multi: false, onChange: (it) => { answer.time = it.value; checkWhen(); } });
+
+    const foods = [
+      { icon: "🍲", label: "火锅" }, { icon: "🍣", label: "日料" }, { icon: "🍝", label: "西餐" },
+      { icon: "🍢", label: "烧烤" }, { icon: "🥘", label: "韩料" }, { icon: "🍜", label: "粉面" },
+      { icon: "🍰", label: "甜品" }, { icon: "🎲", label: "你决定" },
+    ];
+    makeChips($("#foodGrid"), foods, { multi: true, onChange: (it, on) => {
+      on ? answer.food.add(it.label) : answer.food.delete(it.label);
+      nextBtn("sFood").disabled = answer.food.size === 0;
+    } });
+
+    const doings = [
+      { icon: "🎬", label: "看电影" }, { icon: "🌃", label: "压马路" }, { icon: "🖼️", label: "看展" },
+      { icon: "🎤", label: "唱K" }, { icon: "🎸", label: "Livehouse" }, { icon: "🎡", label: "游乐园" },
+      { icon: "📚", label: "逛书店" }, { icon: "🐈", label: "撸猫" },
+    ];
+    makeChips($("#doGrid"), doings, { multi: true, onChange: (it, on) => {
+      on ? answer.doing.add(it.label) : answer.doing.delete(it.label);
+      nextBtn("sDo").disabled = answer.doing.size === 0;
+    } });
+
+    $$("[data-next]").forEach((b) => b.addEventListener("click", () => show(b.dataset.next)));
+
+    // ---------- ticket ----------
+    function replyText() {
+      const note = $("#note").value.trim();
+      return [
+        `${cfg.from}，我答应你啦 ♥`,
+        `📅 ${answer.date} ${answer.time}`,
+        `🍽️ ${[...answer.food].join("、")}`,
+        `✨ ${[...answer.doing].join("、")}`,
+        note ? `💬 ${note}` : "",
+        `—— ${cfg.to}`,
+      ].filter(Boolean).join("\n");
+    }
+    $("#finish").addEventListener("click", () => {
+      $("#tDate").textContent = answer.date;
+      $("#tTime").textContent = answer.time;
+      $("#tFood").textContent = [...answer.food].join("、");
+      $("#tDo").textContent = [...answer.doing].join("、");
+      $("#tNote").textContent = $("#note").value.trim() || "期待见到你";
+      gsap.set("#stamp", { autoAlpha: 0 });
+      show("sTicket")
+        .fromTo("#stamp", { autoAlpha: 0, scale: 2.6, rotation: -30 }, { autoAlpha: 1, scale: 1, rotation: -14, duration: D(0.45), ease: "power4.in" }, "+=0.2")
+        .add(() => { const [x, y] = centerOf($("#stamp")); burst(x, y, 30); })
+        .fromTo("#sTicket .card", { x: -4 }, { x: 0, duration: D(0.3), ease: "elastic.out(1, 0.2)" });
+    });
+
+    async function copy(text, okMsg) {
+      try {
+        await navigator.clipboard.writeText(text);
+        toast(okMsg);
+      } catch {
+        window.prompt("复制下面的内容：", text);
+      }
+    }
+    $("#copyReply").addEventListener("click", () => copy(replyText(), "已复制，快去发给 " + cfg.from + " 吧"));
+    $("#restart").addEventListener("click", () => show("sWhen"));
+
+    // ---------- creator ----------
+    function buildLink() {
+      const u = new URL(location.href.split("?")[0].split("#")[0]);
+      const to = $("#cTo").value.trim(), from = $("#cFrom").value.trim(), msg = $("#cMsg").value.trim();
+      if (to) u.searchParams.set("to", to);
+      if (from) u.searchParams.set("from", from);
+      if (msg) u.searchParams.set("msg", msg);
+      return u.toString();
+    }
+    $("#goCreate").addEventListener("click", () => show("sCreate"));
+    $("#makeLink").addEventListener("click", () => {
+      const link = buildLink();
+      const out = $("#linkOut");
+      out.textContent = link;
+      out.style.display = "block";
+      gsap.from(out, { autoAlpha: 0, y: 8, duration: D(0.3) });
+      copy(link, "链接已复制，发给 TA 吧 💌");
+    });
+    $("#preview").addEventListener("click", () => { location.href = buildLink(); });
+
+    // ---------- start ----------
+    show(params.has("create") ? "sCreate" : "sEnvelope");
+  })();
+  </script>
+</body>
+</html>

@@ -147,7 +147,7 @@ gsap-skills/
     gsap-react/      SKILL.md
     gsap-performance/  SKILL.md
     gsap-frameworks/ SKILL.md
-  examples/         # Minimal reference demos (vanilla + React)
+  examples/         # Reference demos (vanilla, React, Vue, Nuxt, date-invitation)
 ```
 
 ## GitHub Copilot

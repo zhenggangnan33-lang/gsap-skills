@@ -27,3 +27,10 @@ These examples are intended as reference implementations for AI agents and for q
 - **examples/nuxt/** — Nuxt 4 with GSAP re-usable composable.
 - From repo root: `cd examples/nuxt && npm install && npm run dev`.
 - Patterns: GSAP as reusable composable (`useGSAP.ts`), for gsap access, lazy-loading plugins, `gsap.context(() => {}, scope)` cleanup.
+
+## Date invitation (vanilla, single file)
+
+- **examples/date-invitation/** — a complete mini site: a 💌 date invitation that opens from an envelope, asks the question (the "no" button runs away), lets the recipient pick date/time/food/activity, and ends with a stamped "date ticket" plus a copyable reply.
+- Open `examples/date-invitation/index.html` directly in a browser (GSAP loads from cdnjs), or host it anywhere static.
+- Personalise via URL: `?to=小满&from=阿树&msg=第一行/第二行`, or open `?create` to generate a link.
+- Patterns: scene transitions with `gsap.timeline()` + `autoAlpha`, `stagger`, `gsap.utils.random()` for confetti, `delayedCall`, idle loops killed on interaction, and `prefers-reduced-motion` respected (durations collapse to 0).
